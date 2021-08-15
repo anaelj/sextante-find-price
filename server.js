@@ -1,7 +1,7 @@
 import express from "express";
-import router from "./routes/index.js";
+import router from "./src/routes/index.js";
 import cors from "cors";
-import {getPricesKabum} from "./scrap/kabum.js"
+import {getPricesKabum} from "./src/scrap/kabum.js"
 
 
 const app = express();
