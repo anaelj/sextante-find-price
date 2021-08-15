@@ -2,7 +2,13 @@ import puppeteer from "puppeteer";
 
 export async function getPricesMagazine(textFind, showBrowser = false) {
   try {
-    const browser = await puppeteer.launch({ headless: !showBrowser });
+    // const browser = await puppeteer.launch({ headless: !showBrowser });
+    const browser = await puppeteer.launch({
+      'args' : [
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+      ]
+    });
     const page = await browser.newPage();
 
     page.on("request", (request) => {
@@ -54,6 +60,6 @@ export async function getPricesMagazine(textFind, showBrowser = false) {
   }
 }
 
- const rtx2060 = await getPricesMagazine( "rtx 1660 super");
+//  const rtx2060 = await getPricesMagazine( "rtx 1660 super");
 
-console.log(rtx2060);
+// console.log(rtx2060);

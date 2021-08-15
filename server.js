@@ -3,6 +3,7 @@ import router from "./src/routes/index.js";
 import cors from "cors";
 import { getPricesKabum } from "./src/scrap/kabum.js";
 import { getPricePichau } from "./src/scrap/pichau.js";
+import { getPricesMagazine } from "./src/scrap/magazine.js";
 
 const app = express();
 app.use(express.json());
@@ -13,8 +14,10 @@ app.set("port", port);
 app.use("/prices", async (req, res) => {
   const pricesKabum = await getPricesKabum("rtx 2060");
   const pricesPichau = await getPricePichau("rtx 2060")
+  const pricesMagazine = await getPricesMagazine("rtx 2060")
 
-  const prices =[pricesKabum, pricesPichau]; //, ...pricesPichau
+  const prices = [...pricesKabum.concat(pricesPichau).concat(pricesMagazine)];
+  // prices.push((...pricesKabum, ...pricesPichau)); //, ...pricesPichau
 
   res.send(prices);
 });
