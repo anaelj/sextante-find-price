@@ -2,7 +2,6 @@ import puppeteer from "puppeteer";
 
 export async function getPricesKabum( textFind, showBrowser = false) {
   try {
-    // const browser = await puppeteer.launch();
 
     // const browser = await puppeteer.launch({ headless: !showBrowser });
 
@@ -12,7 +11,7 @@ export async function getPricesKabum( textFind, showBrowser = false) {
         '--disable-setuid-sandbox'
       ]
     });
-    
+
     const page = await browser.newPage();
 
     await page.goto(
