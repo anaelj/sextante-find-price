@@ -12,13 +12,12 @@ const port = process.env.PORT || "3333";
 app.set("port", port);
 
 app.use("/prices", async (req, res) => {
-  const pricesKabum = await getPricesKabum("rtx 2060");
-  const pricesPichau = await getPricePichau("rtx 2060")
-  const pricesMagazine = await getPricesMagazine("rtx 2060")
+  const pricesKabum = await getPricesKabum(req.query.textSearch);
+  const pricesPichau = await getPricePichau(req.query.textSearch)
+  const pricesMagazine = await getPricesMagazine(req.query.textSearch)
 
   const prices = [...pricesKabum.concat(pricesPichau).concat(pricesMagazine)];
-  // prices.push((...pricesKabum, ...pricesPichau)); //, ...pricesPichau
-
+  // console.log(req.query.textSearch)
   res.send(prices);
 });
 
