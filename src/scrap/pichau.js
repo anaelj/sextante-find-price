@@ -49,8 +49,6 @@ export async function getPricePichau(textFind, showBrowser = false) {
           console.log('error pichau')
           return product;
         }
-
-        return error;
       })
       .then((res) => {
         !showBrowser && browser.close();

@@ -2,6 +2,8 @@ import puppeteer from "puppeteer";
 
 export async function getPricesMagazine(textFind, showBrowser = false) {
   try {
+    console.log("---------------------------------------- magazine ------------------------------");
+  
     // const browser = await puppeteer.launch({ headless: !showBrowser });
     const browser = await puppeteer.launch({
       'args' : [
