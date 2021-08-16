@@ -13,14 +13,15 @@ export async function getSubmarino(textFind, showBrowser = false) {
     });
 
     const page = await browser.newPage();
-
     await page.goto(
       `https://www.submarino.com.br/busca/${textFind.replace(
         " ",
         "-"
       )}?sortBy=lowerPrice`
-    );
-    // await page.setJavaScriptEnabled(false);
+      ,{
+        timeout: 20000,
+        waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      }    );
 
     return await page
       .evaluate(() => {

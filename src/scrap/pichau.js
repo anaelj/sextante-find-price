@@ -11,12 +11,16 @@ export async function getPricePichau(textFind, showBrowser = false) {
       ]
     });
     const page = await browser.newPage();
-
+    
     await page.goto(
       `https://www.pichau.com.br/search?q=${textFind.replace(
         " ",
         "%20"
       )}&sort=price-asc`
+      ,{
+        timeout: 20000,
+        waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      }
     );
 
     return await page

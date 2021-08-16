@@ -26,8 +26,10 @@ export async function getPricesMagazine(textFind, showBrowser = false) {
         " ",
         "%20"
       )}/?ordem=menor-preco`
-    );
-    await page.setJavaScriptEnabled(false);
+      ,{
+        timeout: 20000,
+        waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
+      }    );
 
     return await page
       .evaluate(() => {
