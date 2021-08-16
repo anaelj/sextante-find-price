@@ -1,12 +1,17 @@
 import puppeteer from "puppeteer";
 
 export async function getSubmarino(textFind, showBrowser = false) {
-  function formatValue2(value) {
-    return 0;
-  }
 
   try {
-    const browser = await puppeteer.launch({ headless: !showBrowser });
+    console.log("---------------------------------------- submarino ------------------------------");
+    // const browser = await puppeteer.launch({ headless: !showBrowser });
+    const browser = await puppeteer.launch({
+      'args' : [
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+      ]
+    });
+
     const page = await browser.newPage();
 
     await page.goto(
