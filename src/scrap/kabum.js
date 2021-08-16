@@ -3,6 +3,7 @@ import puppeteer from "puppeteer";
 export async function getPricesKabum( textFind, showBrowser = false) {
   try {
 
+    console.log("---------------------------------------- kabum ------------------------------");
     // const browser = await puppeteer.launch({ headless: !showBrowser });
 
     const browser = await puppeteer.launch({

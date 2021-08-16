@@ -2,6 +2,7 @@ import puppeteer from "puppeteer";
 
 export async function getPricePichau(textFind, showBrowser = false) {
   try {
+    console.log("---------------------------------------- pichau ------------------------------");
     // const browser = await puppeteer.launch({ headless: !showBrowser });
     const browser = await puppeteer.launch({
       'args' : [
@@ -45,7 +46,8 @@ export async function getPricePichau(textFind, showBrowser = false) {
 
           return product;
         } catch (error) {
-          temp = "error";
+          console.log('error pichau')
+          return product;
         }
 
         return error;
@@ -59,5 +61,5 @@ export async function getPricePichau(textFind, showBrowser = false) {
   }
 }
 
-// const teste = await getPricePichau(false, "rtx 2060");
+// const teste = await getPricePichau("rtx 2060");
 // console.log(teste);
