@@ -3,13 +3,13 @@ import puppeteer from "puppeteer";
 export async function getPricePichau(textFind, showBrowser = false) {
   try {
     console.log("---------------------------------------- pichau ------------------------------");
-    // const browser = await puppeteer.launch({ headless: !showBrowser });
-    const browser = await puppeteer.launch({
-      'args' : [
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
-      ]
-    });
+    const browser = await puppeteer.launch({ headless: !showBrowser });
+    // const browser = await puppeteer.launch({
+    //   'args' : [
+    //     '--no-sandbox',
+    //     '--disable-setuid-sandbox'
+    //   ]
+    // });
     const page = await browser.newPage();
     
     await page.goto(
@@ -17,10 +17,7 @@ export async function getPricePichau(textFind, showBrowser = false) {
         " ",
         "%20"
       )}&sort=price-asc`
-      ,{
-        timeout: 20000,
-        waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      }
+      
     );
 
     return await page
