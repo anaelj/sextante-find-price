@@ -1,27 +1,29 @@
 import puppeteer from "puppeteer";
 
 export async function getSubmarino(textFind, showBrowser = false) {
-
   try {
-    console.log("---------------------------------------- submarino ------------------------------");
-    // const browser = await puppeteer.launch({ headless: !showBrowser });
-    const browser = await puppeteer.launch({
-      'args' : [
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
-      ]
-    });
+    console.log(
+      "---------------------------------------- submarino ------------------------------"
+    );
+    const browser = await puppeteer.launch({ headless: !showBrowser });
+    // const browser = await puppeteer.launch({
+    //   'args' : [
+    //     '--no-sandbox',
+    //     '--disable-setuid-sandbox'
+    //   ]
+    // });
 
     const page = await browser.newPage();
     await page.goto(
       `https://www.submarino.com.br/busca/${textFind.replace(
         " ",
         "-"
-      )}?sortBy=lowerPrice`
-      ,{
+      )}?sortBy=lowerPrice`,
+      {
         timeout: 20000,
-        waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      }    );
+        waitUntil: "load",
+      }
+    );
 
     return await page
       .evaluate(() => {
@@ -56,12 +58,13 @@ export async function getSubmarino(textFind, showBrowser = false) {
           return product;
         } catch (error) {
           console.log(error);
+          showBrowser && browser.close();
           return product;
         }
         return error;
       })
       .then((res) => {
-        !showBrowser && browser.close();
+        showBrowser && browser.close();
         return res;
       });
   } catch (error) {

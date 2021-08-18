@@ -48,11 +48,12 @@ export async function getPricePichau(textFind, showBrowser = false) {
           return product;
         } catch (error) {
           console.log('error pichau')
+          showBrowser && browser.close();
           return product;
         }
       })
       .then((res) => {
-        !showBrowser && browser.close();
+        showBrowser && browser.close();
         return res;
       });
   } catch (error) {

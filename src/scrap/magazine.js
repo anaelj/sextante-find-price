@@ -4,13 +4,13 @@ export async function getPricesMagazine(textFind, showBrowser = false) {
   try {
     console.log("---------------------------------------- magazine ------------------------------");
   
-    // const browser = await puppeteer.launch({ headless: !showBrowser });
-    const browser = await puppeteer.launch({
-      'args' : [
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
-      ]
-    });
+    const browser = await puppeteer.launch({ headless: !showBrowser });
+    // const browser = await puppeteer.launch({
+    //   'args' : [
+    //     '--no-sandbox',
+    //     '--disable-setuid-sandbox'
+    //   ]
+    // });
     const page = await browser.newPage();
 
     page.on("request", (request) => {
@@ -25,11 +25,7 @@ export async function getPricesMagazine(textFind, showBrowser = false) {
       `https://www.magazineluiza.com.br/busca/${textFind.replace(
         " ",
         "%20"
-      )}/?ordem=menor-preco`
-      ,{
-        timeout: 20000,
-        waitUntil: ["load", "domcontentloaded", "networkidle0", "networkidle2"],
-      }    );
+      )}/?ordem=menor-preco`   );
 
     return await page
       .evaluate(() => {
@@ -50,13 +46,14 @@ export async function getPricesMagazine(textFind, showBrowser = false) {
           }
           return product;
         } catch (error) {
-          temp = "error";
+          showBrowser && browser.close();
+          console.log(error)
         }
 
         return error;
       })
       .then((res) => {
-        !showBrowser && browser.close();
+        showBrowser && browser.close();
         return res;
       });
   } catch (error) {

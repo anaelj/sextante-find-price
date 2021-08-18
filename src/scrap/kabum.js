@@ -4,14 +4,14 @@ export async function getPricesKabum( textFind, showBrowser = false) {
   try {
 
     console.log("---------------------------------------- kabum -----------------------------");
-    // const browser = await puppeteer.launch({ headless: !showBrowser });
+    const browser = await puppeteer.launch({ headless: !showBrowser });
 
-    const browser = await puppeteer.launch({
-      'args' : [
-        '--no-sandbox',
-        '--disable-setuid-sandbox'
-      ]
-    });
+    // const browser = await puppeteer.launch({
+    //   'args' : [
+    //     '--no-sandbox',
+    //     '--disable-setuid-sandbox'
+    //   ]
+    // });
 
     const page = await browser.newPage();
 
@@ -21,6 +21,10 @@ export async function getPricesKabum( textFind, showBrowser = false) {
         "+"
       )}&page_number=1&page_size=20&facet_filters=&sort=price`
     );
+
+    // console.log('1')
+    // await page.waitForNavigation( {options : { waitUntil: 'domcontentloaded' }});
+    // console.log('2')
 
     return await page
       .evaluate(() => {
@@ -45,22 +49,23 @@ export async function getPricesKabum( textFind, showBrowser = false) {
           }
           return product;
         } catch (error) {
+          showBrowser && browser.close();
           temp = "error";
         }
 
         return error;
       })
       .then((res) => {
-        !showBrowser && browser.close();
+        showBrowser && browser.close();
         return res;
       });
   } catch (error) {
     return error;
   }
 }
-  const rtx2060 = await getPricesKabum("rtx 2060", false);
+  // const rtx2060 = await getPricesKabum("rtx 2060", true);
 
-  console.log(rtx2060);
+  // console.log(rtx2060);
 // const rtx1660 = await getPricesKabum(true, "rtx 1660 super");
 // const rtx3080 = await getPricesKabum(true, "rtx 3080");
 // const rtx3070 = await getPricesKabum(true, "rtx 3070");
