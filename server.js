@@ -4,7 +4,8 @@ import cors from "cors";
 import { getPricesKabum } from "./src/scrap/kabum.js";
 import { getPricePichau } from "./src/scrap/pichau.js";
 import { getPricesMagazine } from "./src/scrap/magazine.js";
-// import { getSubmarino } from "./src/scrap/submarino.js";
+import { getSubmarino } from "./src/scrap/submarino.js";
+import { getPricesCasasbahia } from "./src/scrap/casasbahia.js";
 
 
 const app = express();
@@ -27,18 +28,21 @@ app.use((req, res, next) => {
 
 app.use("/prices", async (req, res) => {
 
-  const prices = []; // [...pricesKabum.concat(pricesPichau).concat(pricesMagazine)];
+  const prices = []; // await getPricesKabum(req.query.textSearch); 
 
   console.log(
     "---------------------------------------- start ------------------------------"
   );
   await Promise.all([
-    getPricesKabum(req.query.textSearch),
-    getPricePichau(req.query.textSearch),
-    getPricesMagazine(req.query.textSearch),
-    // getSubmarino(req.query.textSearch)
+    getPricesKabum(req.query.textSearch, true),
+    getPricePichau(req.query.textSearch, true),
+    getPricesMagazine(req.query.textSearch, true),
+    getSubmarino(req.query.textSearch, true),
+    getPricesCasasbahia(req.query.textSearch, true)
   ]).then((values) => {
-    prices.push(...values[0].concat(values[1]).concat(values[2]));
+    prices.push(...values[0].concat(values[1]).concat(values[2]).concat(values[3]).concat(values[4]));
+    //prices.push(values);
+
   });
   console.log(
     "---------------------------------------- end thread ------------------------------"
