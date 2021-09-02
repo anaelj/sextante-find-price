@@ -1,16 +1,12 @@
-import puppeteer from "puppeteer";
+import {getBrownser} from '../utils/browser.js'
 
 export async function getPricesMagazine(textFind, showBrowser = false) {
+
+  const browser = await getBrownser(showBrowser);
+  
   try {
     console.log("---------------------------------------- magazine ------------------------------");
   
-    const browser = await puppeteer.launch({ headless: !showBrowser });
-    // const browser = await puppeteer.launch({
-    //   'args' : [
-    //     '--no-sandbox',
-    //     '--disable-setuid-sandbox'
-    //   ]
-    // });
     const page = await browser.newPage();
 
     page.on("request", (request) => {
@@ -25,7 +21,12 @@ export async function getPricesMagazine(textFind, showBrowser = false) {
       `https://www.magazineluiza.com.br/busca/${textFind.replace(
         " ",
         "%20"
-      )}/?ordem=menor-preco`   );
+      )}/?ordem=menor-preco` 
+      // , {
+      //   waitUntil: 'load',
+      //   // timeout: 10
+      // }
+  );
 
     return await page
       .evaluate(() => {
@@ -57,7 +58,9 @@ export async function getPricesMagazine(textFind, showBrowser = false) {
         return res;
       });
   } catch (error) {
-    return error;
+    console.log(error);
+    browser && browser.close();
+    return [];
   }
 }
 

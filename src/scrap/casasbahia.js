@@ -1,18 +1,14 @@
-import puppeteer from "puppeteer";
+import {getBrownser} from '../utils/browser.js'
 
 export async function getPricesCasasbahia(textFind, showBrowser = false) {
+  
+  const browser = await getBrownser(showBrowser);
+  
   try {
     console.log(
-      "---------------------------------------- kabum -----------------------------"
+      "---------------------------------------- casas bahia -----------------------------"
     );
-    const browser = await puppeteer.launch({ headless: !showBrowser });
 
-    // const browser = await puppeteer.launch({
-    //   'args' : [
-    //     '--no-sandbox',
-    //     '--disable-setuid-sandbox'
-    //   ]
-    // });
 
     const page = await browser.newPage();
 
@@ -20,7 +16,11 @@ export async function getPricesCasasbahia(textFind, showBrowser = false) {
       `https://www.casasbahia.com.br/${textFind.replace(
         " ",
         "-"
-      )}/b?sortby=ascprice`
+      )}/b?sortby=ascprice`,
+      // {
+      //   waitUntil: "load",
+      //   // timeout: 10
+      // }
     );
 
     // console.log('1')
@@ -39,21 +39,22 @@ export async function getPricesCasasbahia(textFind, showBrowser = false) {
           for (let index = 0; index < temp.length; index++) {
             const element = temp[index];
             const nomeProduto = element?.childNodes[0]?.innerText;
-
             const value = element?.childNodes[0]
-              .getElementsByTagName("span")[3]
+              ?.getElementsByTagName("span")[3]
               ?.innerText?.replace(/\D/g, "");
+            const link =
+              element?.childNodes[0]?.getElementsByTagName("a")[0]?.href;
 
-            console.log(value)
-
-            product.push({
-              name: nomeProduto.substring(1,nomeProduto.indexOf("\n")),
-              price:
-                value?.substring(0, value.length - 2) +
-                "." +
-                value?.substring(value.length - 2, value.length),
-              link: element?.childNodes[0]?.getElementsByTagName('a')[0]?.href,
-            });
+            if (nomeProduto && value && link) {
+              product.push({
+                name: nomeProduto.substring(1, nomeProduto.indexOf("\n")),
+                price:
+                  value?.substring(0, value.length - 2) +
+                  "." +
+                  value?.substring(value.length - 2, value.length),
+                link,
+              });
+            }
           }
           return product;
         } catch (error) {
@@ -68,7 +69,10 @@ export async function getPricesCasasbahia(textFind, showBrowser = false) {
         return res;
       });
   } catch (error) {
-    return error;
+    console.log(error);
+    browser && browser.close();
+    return [];
+
   }
 }
 // const rtx2060 = await getPricesCasasbahia("rtx 2060", true);

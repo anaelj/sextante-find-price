@@ -1,17 +1,14 @@
-import puppeteer from "puppeteer";
+import {getBrownser} from '../utils/browser.js'
 
-export async function getPricesKabum( textFind, showBrowser = false) {
+export async function getPricesKabum(textFind, showBrowser = false) {
+  
+  const browser = await getBrownser(showBrowser);
+
   try {
+    console.log(
+      "---------------------------------------- kabum -----------------------------"
+    );
 
-    console.log("---------------------------------------- kabum -----------------------------");
-    const browser = await puppeteer.launch({ headless: !showBrowser });
-
-    // const browser = await puppeteer.launch({
-    //   'args' : [
-    //     '--no-sandbox',
-    //     '--disable-setuid-sandbox'
-    //   ]
-    // });
 
     const page = await browser.newPage();
 
@@ -19,7 +16,11 @@ export async function getPricesKabum( textFind, showBrowser = false) {
       `https://www.kabum.com.br/busca?query=${textFind.replace(
         " ",
         "+"
-      )}&page_number=1&page_size=20&facet_filters=&sort=price`
+      )}&page_number=1&page_size=20&facet_filters=&sort=price`,
+      // {
+      //   waitUntil: "load",
+      //   // timeout: 10
+      // }
     );
 
     // console.log('1')
@@ -34,18 +35,27 @@ export async function getPricesKabum( textFind, showBrowser = false) {
             .getElementsByTagName("main")[0]
             .getElementsByTagName("main")[0]
             .getElementsByTagName("a");
+
           for (let index = 0; index < temp.length; index++) {
             const element = temp[index];
-            product.push({
-              name: element.getElementsByTagName("h2")[0].innerText,
-              price: element
-                .getElementsByTagName("span")[1]
-                .innerText.replace(" ", "")
-                .replace("R$", "")
-                .replace(".", "")
-                .replace(",", "."),
-                link: element.href,
-            });
+
+            const name = element.getElementsByTagName("h2")[0].innerText;
+            const price = element
+              ?.getElementsByTagName("span")[1]
+              ?.innerText.replace(" ", "")
+              .replace("R$", "")
+              .replace(".", "")
+              .replace(",", ".");
+
+            const link = element?.href;
+
+            if (name && price && link) {
+              product.push({
+                name,
+                price,
+                link,
+              });
+            }
           }
           return product;
         } catch (error) {
@@ -60,12 +70,15 @@ export async function getPricesKabum( textFind, showBrowser = false) {
         return res;
       });
   } catch (error) {
-    return error;
+    console.log(error);
+    browser && browser.close();
+    return [];
+
   }
 }
-  // const rtx2060 = await getPricesKabum("rtx 2060", true);
+// const rtx2060 = await getPricesKabum("rtx 2060", true);
 
-  // console.log(rtx2060);
+// console.log(rtx2060);
 // const rtx1660 = await getPricesKabum(true, "rtx 1660 super");
 // const rtx3080 = await getPricesKabum(true, "rtx 3080");
 // const rtx3070 = await getPricesKabum(true, "rtx 3070");
